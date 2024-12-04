@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[githubobsidian]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib/media/favicon.png</url><title>githubobsidian</title><link></link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Wed, 04 Dec 2024 16:42:03 GMT</lastBuildDate><atom:link href="lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Wed, 04 Dec 2024 16:42:02 GMT</pubDate><ttl>60</ttl><dc:creator></dc:creator><item><title><![CDATA[学習ロードマップ]]></title><description><![CDATA[ 
+ <br><a data-tooltip-position="top" aria-label="https://qiita.com/yukky_memo/items/6e1c7fa08b9b91278886?utm_source=Qiita+%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9&amp;utm_campaign=e4e7fa6bb8-Qiita_newsletter_643_11_06_2024&amp;utm_medium=email&amp;utm_term=0_e44feaa081-e4e7fa6bb8-33625101" rel="noopener nofollow" class="external-link" href="https://qiita.com/yukky_memo/items/6e1c7fa08b9b91278886?utm_source=Qiita+%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9&amp;utm_campaign=e4e7fa6bb8-Qiita_newsletter_643_11_06_2024&amp;utm_medium=email&amp;utm_term=0_e44feaa081-e4e7fa6bb8-33625101" target="_blank">Geminiを使ったらKaggle初挑戦、参加期間10日間でも5位入賞できたので手法をすべて書く</a><br>Nuxt]]></description><link>github/Kaggle/学習ロードマップ.html</link><guid isPermaLink="false">github/Kaggle/学習ロードマップ.md</guid><pubDate>Thu, 07 Nov 2024 03:08:15 GMT</pubDate></item><item><title><![CDATA[メモ]]></title><description><![CDATA[ 
+ <br><br>
+<br>import type は型情報だけをインポート
+<br>型としてしか用いていないのでこのようなimportになる
+<br>Copy code
+// types.ts
+export type UserType = {
+  id: number;
+  name: string;
+};
+
+// user.ts
+import { UserType } from './types';
+<br>
+<br>メリット
+
+<br>明示的: import typeを使用することで読み込むのは型情報だけであることを明確に示せます。
+<br>効率的: 実行時のJavaScriptには影響を及ぼさないため、パフォーマンスの向上やバンドルサイズの削減が期待できます。
+
+
+<br><br>
+<br>interfaceは拡張性がある
+
+<br>故に推奨されているが、故に知らないところで拡張されていることもある
+
+
+<br>interface User {
+  name: string;
+}
+
+interface User {
+  level: number;
+}
+
+const user: User = {
+  name: "apple",
+  level: 0
+};
+
+const user2: User = {
+  name: "banana"
+}; //Property 'level' is missing in type '{ name: string; }' but required in type 'User'
+<br><br>
+<br>Nuxt3以降でsetup内ではthisが使えない
+
+<br>その代わりuseNuxtApp()を使用してNuxtインスタンスにアクセスします
+
+
+<br><br>
+<br>現在のアクティブなルートに関する情報を取得するために使う。
+<br>useRouteは 現在のルートのRouteオブジェクトを返す。(path、query、paramsなど、現在のURLの情報が含まれる。)
+<br>URLパラメーターやクエリパラメーターを取得する際に使用。
+<br>提供するコンピューテッドリファレンス
+
+<br>fullPath：パス、クエリ、ハッシュを含む現在のルートに関連するエンコードされた URL
+<br>hash：# で始まる URL のハッシュ部分をデコードしたもの
+<br>matched：現在のルートロケーションが正規化されたマッチングルートの配列
+<br>meta：レコードに添付されるカスタムデータ
+<br>name：ルートレコードの一意な名前
+<br>path：URL のエンコードされたパス名部分
+<br>redirectedFrom：現在のルートロケーションに到達する前にアクセスしようとしたルートロケーション
+
+
+<br><br>
+<br>リアクティブな値をもとに（副作用を伴うことなく、その値をもって）別のリアクティブな値を取得する場合に、Computed プロパティを利用
+<br>利用例
+
+<br>（ボタンのクリックなどで inc() が呼ばれ）counter&nbsp;の値が変更されると、doubled&nbsp;の値も自動的に更新されます。
+<br>doubled&nbsp;の値が（テンプレート内のHTMLや、その他の場所で）参照されるたびにcounter&nbsp;の値を2倍にする関数が実行されるのではなく&nbsp;counter&nbsp;の値が変更されたときのみ&nbsp;Computed プロパティに記述した関数が実行されます。
+<br>そのため、開発者はとくに意識することなく、パフォーマンスの良いコードを書くことができます。
+
+
+<br>const counter = ref(0)
+const doubled = computed(() =&gt; counter.value * 2)
+
+const inc = () =&gt; counter.value++
+<br><a rel="noopener nofollow" class="external-link" href="https://qiita.com/MS-0610/items/d58e90c0b520b68bfd57" target="_blank">https://qiita.com/MS-0610/items/d58e90c0b520b68bfd57</a><br><br>
+<br>レイアウトファイルからページファイルを読み込む
+<br>&lt;template&gt;
+	&lt;div&gt;
+		&lt;slot /&gt; // pages配下のファイルを表示する
+	&lt;/div&gt;
+&lt;/template&gt;
+<br>-　ページファイルからレイアウトファイルを読み込む<br>&lt;script setup&gt;
+definePageMeta({ layout: 'foo' })
+&lt;/script&gt;
+<br>Nuxt]]></description><link>github/Nuxt/メモ.html</link><guid isPermaLink="false">github/Nuxt/メモ.md</guid><pubDate>Thu, 07 Nov 2024 03:15:29 GMT</pubDate></item><item><title><![CDATA[obsidian]]></title><description><![CDATA[ 
+ <br><br><a rel="noopener nofollow" class="external-link" href="https://gihyo.jp/article/2022/12/obsidian-02" target="_blank">https://gihyo.jp/article/2022/12/obsidian-02</a><br>
+<a rel="noopener nofollow" class="external-link" href="https://qiita.com/sypn/items/808636ea3bde6bfe6de7" target="_blank">https://qiita.com/sypn/items/808636ea3bde6bfe6de7</a><br><br><a rel="noopener nofollow" class="external-link" href="https://note.com/indigo372/n/n0c96bac9a1eb" target="_blank">https://note.com/indigo372/n/n0c96bac9a1eb</a><br>
+<a rel="noopener nofollow" class="external-link" href="https://qiita.com/Kei_Adachi/items/1f5d01230334574f2e26" target="_blank">https://qiita.com/Kei_Adachi/items/1f5d01230334574f2e26</a><br>
+<a rel="noopener nofollow" class="external-link" href="https://blog.asterism.xyz/posts/a199cf0e48ceaf92d393cfb725f1d584/" target="_blank">https://blog.asterism.xyz/posts/a199cf0e48ceaf92d393cfb725f1d584/</a><br>
+<a rel="noopener nofollow" class="external-link" href="https://note.com/yoshida_he8ro/n/nfffe1c85b467" target="_blank">https://note.com/yoshida_he8ro/n/nfffe1c85b467</a><br><br><a rel="noopener nofollow" class="external-link" href="https://ryotaushio.github.io/the-hobbyist-dev/obsidian/misc/%E8%87%AA%E4%BD%9C%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E7%B4%B9%E4%BB%8B.html" target="_blank">https://ryotaushio.github.io/the-hobbyist-dev/obsidian/misc/%E8%87%AA%E4%BD%9C%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E7%B4%B9%E4%BB%8B.html</a><br><br><a rel="noopener nofollow" class="external-link" href="https://ryotaushio.github.io/the-hobbyist-dev/" target="_blank">https://ryotaushio.github.io/the-hobbyist-dev/</a><br><br>Webpage HTML Export]]></description><link>github/obsidian/obsidian.html</link><guid isPermaLink="false">github/obsidian/obsidian.md</guid><pubDate>Sun, 10 Nov 2024 04:03:52 GMT</pubDate></item><item><title><![CDATA[静的サイト公開計画]]></title><description><![CDATA[ 
+ <br>Webpage HTML Exportでobsidianを静的サイトとしてgithub.pagesに公開する方法<br><br>ChatGPT<br>ObsidianのノートをHTML形式でエクスポートし、GitHub Pagesを利用して静的サイトとして公開する手順を解説します。以下のステップを順に実行してください。<br><br><br>
+<br>Obsidian: メインのノート管理ツール
+<br>Webpage HTML Exportプラグイン: ObsidianノートをHTML形式に変換
+<br>GitHubアカウント: GitHub Pagesを利用するためのアカウント
+<br>Git（オプション）: コマンドラインでGitHubにファイルをプッシュする場合に必要
+<br><br><br>
+<br>
+Webpage HTML Exportプラグインをインストール:
+
+<br>Obsidianの「設定」→「プラグイン」→「コミュニティプラグイン」を開き、「Webpage HTML Export」を検索してインストール。
+<br>プラグインを有効化する。
+
+
+<br>
+HTMLエクスポート設定:
+
+<br>「設定」→「Webpage HTML Export」から、以下の設定を確認・調整:
+
+<br>出力ディレクトリ: エクスポート先のフォルダを指定（例: export フォルダ）。
+<br>画像のコピー: 画像や添付ファイルを含めるオプションを有効にする。
+
+
+
+
+<br>
+ノートをHTMLにエクスポート:
+
+<br>「コマンドパレット（Ctrl/Cmd + P）」を開き、「Webpage HTML Export」を実行。
+<br>指定したディレクトリにHTMLファイルが生成されます。
+
+
+<br><br><br>
+<br>
+新しいリポジトリを作成:
+
+<br>GitHubにログインし、「New Repository」をクリック。
+<br>名前を設定（例: obsidian-site）し、「Public」に設定。
+
+
+<br>
+ローカルでリポジトリを設定（Git使用の場合）:
+bash
+コードをコピーする
+git init <br>
+git remote add origin <a data-tooltip-position="top" aria-label="https://github.com/your-username/obsidian-site.git%60" rel="noopener nofollow" class="external-link" href="https://github.com/your-username/obsidian-site.git%60" target="_blank">https://github.com/your-username/obsidian-site.git`</a>
+
+<br><br><br>
+<br>
+HTMLファイルをリポジトリにアップロード:
+
+<br>エクスポートしたHTMLファイルをリポジトリのルートに配置します。
+<br>Gitを使う場合:
+  bash
+  コードをコピーする
+  git add . git commit -m "Initial commit" git push origin main<br>
+
+
+
+<br>
+GitHub Pagesを有効化:
+
+<br>リポジトリの「Settings」→「Pages」に移動。
+<br>「Source」で main ブランチを選択し、保存。
+
+
+<br>
+公開URLを確認:
+
+<br>設定完了後、GitHub PagesのURL（例: https://your-username.github.io/obsidian-site）が表示されます。
+
+
+<br><br><br>
+<br>エクスポートされたHTMLにはデフォルトのスタイルが適用されていますが、以下の方法でカスタマイズ可能です:
+
+<br>CSSファイルを編集: styles.css を修正する。
+<br>カスタムHTMLテンプレートの使用: プラグインの設定でテンプレートを変更。
+
+
+<br><br><br>
+<br>Obsidianノートを更新した場合、再度HTMLエクスポートを実行し、GitHubリポジトリにプッシュします。
+<br><br><br>
+<br><a data-tooltip-position="top" aria-label="https://obsidian.md/" rel="noopener nofollow" class="external-link" href="https://obsidian.md/" target="_blank">Obsidian公式サイト</a>
+<br><a data-tooltip-position="top" aria-label="https://github.com/obsidian-html/webpage-html-export" rel="noopener nofollow" class="external-link" href="https://github.com/obsidian-html/webpage-html-export" target="_blank">Webpage HTML Export GitHub</a>
+<br><a data-tooltip-position="top" aria-label="https://docs.github.com/en/pages" rel="noopener nofollow" class="external-link" href="https://docs.github.com/en/pages" target="_blank">GitHub Pages公式ドキュメント</a>
+<br>これで、ObsidianノートをGitHub Pagesで静的サイトとして公開する準備が整います！何か不明点があれば教えてください。]]></description><link>github/obsidian/静的サイト公開計画.html</link><guid isPermaLink="false">github/obsidian/静的サイト公開計画.md</guid><pubDate>Thu, 28 Nov 2024 03:18:12 GMT</pubDate></item><item><title><![CDATA[テスト項目書]]></title><description><![CDATA[ 
+ <br>DB移行に伴うテスト項目書の作成では、以下のような基準に基づいて項目を設けると、移行が正常に完了したことを確認しやすくなります。以下、一般的な基準を挙げてみます。<br><br>
+<br>レコード数の一致: 移行前後でレコード数が一致するか確認します。
+<br>データ内容の一致: 重要なデータフィールドが正確に移行されているかをサンプル検証します。
+<br>NULL値の扱い: NULLや空文字列が正しく扱われているか確認します。
+<br>データ型の一致: 移行先でデータ型が正しく設定されているかを確認します。
+<br>IDや参照キーの整合性: 外部キーやIDなどの一意の識別子が正しく関連付けられているか確認します。
+<br><br>
+<br>基本機能の動作テスト: アプリケーションの基本機能が期待通りに動作するか確認します。
+<br>データの読み込みと書き込み: 新しいDBに対してデータの読み書きが正しく行われるか検証します。
+<br>検索・フィルター機能: データ検索やフィルタリング機能が正常に動作するか確認します。
+<br>トランザクション処理: データベースへの更新や削除処理が正常に行われ、ロールバックも適切に動作するかをテストします。
+<br><br>
+<br>応答時間: データの読み込み速度が移行前と比較して遅くなっていないか確認します。
+<br>負荷テスト: 大量アクセス時やバッチ処理時にパフォーマンスが維持されるか確認します。
+<br>キャッシュ設定の確認: 必要に応じてキャッシュが適切に動作し、パフォーマンスが最適化されているかを確認します。
+<br><br>
+<br>アクセス権限: ユーザーやロールごとに正しいアクセス権限が設定されているか確認します。
+<br>暗号化の適用: パスワードや機密データが適切に暗号化されているか確認します。
+<br>SQLインジェクション対策: 移行後もSQLインジェクションに対する保護が効いているか確認します。
+<br><br>
+<br>エラーハンドリングの確認: 予期しないエラーが発生した際に、適切なエラーメッセージが表示されるか確認します。
+<br>ログ記録: エラーやデータ更新の際、ログが正しく記録されるか確認します。
+<br>リトライ処理: データベース接続エラー時にリトライが必要な場合、適切に処理されるか確認します。
+<br><br>
+<br>バックアップの取得: 移行前後にバックアップが取得できているかを確認します。
+<br>リカバリテスト: 万が一データが壊れた場合に、バックアップからのリカバリが可能かをテストします。
+<br><br>
+<br>API連携: 外部システムとAPIで連携している場合、APIが正しく動作するか確認します。
+<br>バッチ処理や定期ジョブ: 外部システムとのデータ連携やスケジュール処理が正しく動作するか確認します。
+<br><br>
+<br>通知やアラート: 移行作業によってユーザーが正しく通知を受け取れるか確認します。
+<br>ユーザーインターフェースの表示: データベース移行によってUI上でのデータ表示に問題がないか確認します。
+<br><br>
+<br>回帰テスト: データベース移行により影響が出る可能性のある周辺機能を全体的に再テストします。
+]]></description><link>github/テスト/テスト項目書.html</link><guid isPermaLink="false">github/テスト/テスト項目書.md</guid><pubDate>Tue, 05 Nov 2024 15:17:53 GMT</pubDate></item><item><title><![CDATA[学習ロードマップ]]></title><description><![CDATA[ 
+ <br><a rel="noopener nofollow" class="external-link" href="https://qiita.com/eureka-ai/items/6c55e3b6d9617ae58afa?utm_source=Qiita+%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9&amp;utm_campaign=e4e7fa6bb8-Qiita_newsletter_643_11_06_2024&amp;utm_medium=email&amp;utm_term=0_e44feaa081-e4e7fa6bb8-33625101" target="_blank">https://qiita.com/eureka-ai/items/6c55e3b6d9617ae58afa?utm_source=Qiita+%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9&amp;utm_campaign=e4e7fa6bb8-Qiita_newsletter_643_11_06_2024&amp;utm_medium=email&amp;utm_term=0_e44feaa081-e4e7fa6bb8-33625101</a>]]></description><link>github/機械学習/学習ロードマップ.html</link><guid isPermaLink="false">github/機械学習/学習ロードマップ.md</guid><pubDate>Tue, 05 Nov 2024 23:56:43 GMT</pubDate></item><item><title><![CDATA[『ソフトウェアアーキテクチャの基礎』]]></title><description><![CDATA[ 
+ <br><br>ソフトウェアアーキテクチャは<br>
+<br>システムの構造 (例：マイクロサービス)
+<br>システムがサポートしなければならないアーキテクチャ特性 (可用性、信頼性、など)
+<br>アーキテクチャ決定 (システムの制約、何が許されて許されないかの指針)
+<br>設計指針 (ガイドライン)
+<br>の組み合わせで構成される<br><br>物事をアーキテクトとして見ること…アーキテクチャ思考<br>アーキテクトらしく考えるのに重要な4つの側面<br>
+<br>アーキテクチャと設計の違いを理解し、アーキテクチャを機能させるために開発チームとどう協働するか理解すること
+
+<br>アーキテクトと開発チームの密なコラボレーション (一方向ではない)
+
+
+<br>ある程度の技術的な深さを維持しながら他の人には見えないソリューションや可能性を見出せるように広範囲な技術を身につけること
+
+<br>技術の深さは開発者依存であり、アーキテクトは幅が重要である
+<br>知識の収集方法もかんがえなくてはならない
+
+
+<br>様々なソリューションと技術の間にあるトレードオフを理解・分析・調整すること
+
+<br>あらゆることは場合による
+<br>"プログラマーは利点はわかっているが、トレードオフはわかっていない。アーキテクトはその両方を理解する必要がある"
+<br>ソフトウェアアーキテクチャではすべてがトレードオフ
+
+
+<br>ビジネスドライバーの重要性を理解しどのようにアーキテクチャの関心ごとに反映されるか理解していること
+<br>アーキテクトはコードを書くべきである<br>
+現場感を持つアーキテクトになるためにはコードレビュー]]></description><link>github/技術書備忘録/『ソフトウェアアーキテクチャの基礎』.html</link><guid isPermaLink="false">github/技術書備忘録/『ソフトウェアアーキテクチャの基礎』.md</guid><pubDate>Wed, 06 Nov 2024 14:00:25 GMT</pubDate></item><item><title><![CDATA[技術]]></title><description><![CDATA[ 
+ <br><a data-tooltip-position="top" aria-label="https://qiita.com/tommy_aka_jps/items/9b3a8fb1939033003119?utm_source=Qiita+%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9&amp;utm_campaign=e4e7fa6bb8-Qiita_newsletter_643_11_06_2024&amp;utm_medium=email&amp;utm_term=0_e44feaa081-e4e7fa6bb8-33625101" rel="noopener nofollow" class="external-link" href="https://qiita.com/tommy_aka_jps/items/9b3a8fb1939033003119?utm_source=Qiita+%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9&amp;utm_campaign=e4e7fa6bb8-Qiita_newsletter_643_11_06_2024&amp;utm_medium=email&amp;utm_term=0_e44feaa081-e4e7fa6bb8-33625101" target="_blank">技術書の電子書籍をPDF/EPUB で配信しているサイトまとめ</a>]]></description><link>github/技術勉強/技術.html</link><guid isPermaLink="false">github/技術勉強/技術.md</guid><pubDate>Wed, 06 Nov 2024 00:04:20 GMT</pubDate></item><item><title><![CDATA[実装案]]></title><description><![CDATA[ 
+ <br>
+<br>PythonのCLIツール
+
+<br>RSSでブログ新規情報取得
+<br>パッケージ公開
+
+
+]]></description><link>github/実装案/実装案.html</link><guid isPermaLink="false">github/実装案/実装案.md</guid><pubDate>Wed, 27 Nov 2024 09:44:34 GMT</pubDate></item><item><title><![CDATA[Git]]></title><description><![CDATA[ 
+ <br><br>
+<br>リモートブランチを削除する
+<br>git push origin :&lt;branch&gt;
+<br>
+<br>Githubで自分のブランチを確認する方法
+
+<br>branchのプルダウンで一番下の「View all branches」をクリックする
+<br>Yoursのタブを見る
+
+
+<br><br>
+<br>PBR
+
+<br>PBIをスプリントに投入できる記載粒度（Readyな状態）に整える
+<br>検討内容や新たな知見を反映し、PBLを最新化する
+
+
+]]></description><link>github/小技/小技.html</link><guid isPermaLink="false">github/小技/小技.md</guid><pubDate>Tue, 19 Nov 2024 16:54:44 GMT</pubDate></item><item><title><![CDATA[調査案]]></title><description><![CDATA[ 
+ <br>
+<br>アジャイル開発
+]]></description><link>github/調査案/調査案.html</link><guid isPermaLink="false">github/調査案/調査案.md</guid><pubDate>Thu, 28 Nov 2024 02:56:57 GMT</pubDate></item></channel></rss>
